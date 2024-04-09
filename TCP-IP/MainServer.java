@@ -1,0 +1,13 @@
+import java.io.*;
+import java.util.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class MainServer {
+  public static void main(String[] args) {
+    Server s = new Server(2000);
+    s.attendi();
+    s.leggi();
+    s.scrivi();
+  }
+}
