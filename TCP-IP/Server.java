@@ -10,28 +10,27 @@ import java.net.ServerSocket;
 import java.net.Socket;
 // import org.junit.jupiter.api.Test;
 
-public class Server {
+public class Server extends Thread {
 
   private ServerSocket server = null;
   private Socket client = null;
-  private int porta;
 
-  public Server(int porta) {
-    try {
-      this.porta = porta;
-      server = new ServerSocket(porta);
-      System.out.println("S1 - Il server è in ascolto sulla porta " + porta);
-    } catch (IOException e) {
-      System.err.println(e.getMessage());
-      System.err.println("Errore nella fase di apertura e ascolto");
-    }
+  public Server(ServerSocket server) {
+    this.server = server;
   }
 
-  public Socket attendi() {
+  public synchronized Socket attendi() {
     try {
       client = server.accept();
       System.out.println("S2 - Connessione stabilita con il client");
+      leggi();
+      scrivi();
+      wait(10000);
+      System.out.println("S2 - Connessione chiusa con il client");
     } catch (IOException e) {
+      System.err.println(e.getMessage());
+      System.err.println("Errore nella fase di accettazione della connessione con il client");
+    } catch (InterruptedException e) {
       System.err.println(e.getMessage());
       System.err.println("Errore nella fase di accettazione della connessione con il client");
     }
